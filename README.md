@@ -161,9 +161,3 @@ In finance, explainability is a regulatory requirement. A model that cannot expl
 ## 👨‍💻 Author
 
 **Aditya** — 2nd Year BTech CS Student  
-
----
-
-## 📄 License
-
-MIT License
