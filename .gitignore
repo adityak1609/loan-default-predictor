@@ -1,0 +1,12 @@
+*.csv
+*.pkl
+*.json
+*.db
+*.ubj
+__pycache__/
+.ipynb_checkpoints/
+processed/
+mlruns/
+My Music/
+My Pictures/
+My Videos/
