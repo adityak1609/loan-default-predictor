@@ -33,6 +33,13 @@ FEATURE_SETS = {
         C.APPLICANT_NUMERIC + C.ENGINEERED + C.INCUMBENT,
         C.APPLICANT_CATEGORICAL,
     ),
+    # NOT A VALID MODEL. Adds post-origination columns that cannot exist when
+    # the lending decision is made. Used only by scripts/leakage_demo.py to
+    # show what they do to the reported metric.
+    "full_leaky": (
+        C.APPLICANT_NUMERIC + C.ENGINEERED + C.INCUMBENT + C.LEAKY,
+        C.APPLICANT_CATEGORICAL,
+    ),
 }
 
 

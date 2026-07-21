@@ -1,0 +1,28 @@
+{
+  "target": "default within 12 months of origination",
+  "dpd_lag_months": 3,
+  "n_total": 1765426,
+  "in_time_2015": {
+    "n": 421095,
+    "auc": 0.7249405594713615,
+    "average_precision": 0.10025690827681956,
+    "base_rate": 0.04035906386919816,
+    "brier": 0.03770269353214588,
+    "ece": 0.00806689825515725,
+    "mean_predicted": 0.03231803868124298,
+    "observed_rate": 0.04035906386919816
+  },
+  "out_of_time_2016_2017": {
+    "n": 877986,
+    "auc": 0.71185643062409,
+    "average_precision": 0.10668051342173997,
+    "base_rate": 0.045497308613121394,
+    "brier": 0.04237032729473877,
+    "ece": 0.012519286961983168,
+    "mean_predicted": 0.03345058543863615,
+    "observed_rate": 0.045497308613121394
+  },
+  "auc_drop": 0.013084128847271503,
+  "auc_drop_resolved_only_target": 0.02382293917945122,
+  "maturity_auc_gap_resolved_only": -0.024950407311083778
+}

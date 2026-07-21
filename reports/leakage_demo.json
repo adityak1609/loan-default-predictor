@@ -1,0 +1,20 @@
+{
+  "valid_auc": 0.7243375225798409,
+  "leaky_auc": 0.9994743297363947,
+  "inflation": 0.27513680715655386,
+  "leaky_columns": [
+    "last_fico_range_low",
+    "last_fico_range_high",
+    "last_pymnt_amnt",
+    "out_prncp",
+    "total_pymnt",
+    "total_rec_int"
+  ],
+  "leaky_columns_in_top10_importance": [
+    "total_pymnt",
+    "total_rec_int",
+    "last_pymnt_amnt",
+    "last_fico_range_low"
+  ],
+  "verdict": "The leaky model is not deployable: every added column is recorded after origination. It is reported here only to explain why published AUCs on this dataset are not comparable to the 0.72 obtained legitimately."
+}

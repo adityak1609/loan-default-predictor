@@ -18,6 +18,41 @@ SNAPSHOT_END = "2018-12-31"
 TERMINAL_STATUSES = ["Fully Paid", "Charged Off", "Default"]
 DEFAULT_STATUSES = ["Charged Off", "Default"]
 
+# ── Fixed observation window ─────────────────────────────────────────────
+# The terminal-status target above is only observable for loans that have
+# resolved, which biases late vintages toward early defaulters. Labelling
+# "defaulted within HORIZON_MONTHS of origination" instead makes every vintage
+# comparable and lets still-performing loans count as negatives.
+HORIZON_MONTHS = 12
+
+# Statuses that count as a default event. In Grace Period and Late (16-30
+# days) are excluded: both are under 31 days delinquent and frequently cure.
+DEFAULT_EVENT_STATUSES = [
+    "Charged Off",
+    "Default",
+    "Late (31-120 days)",
+    "Does not meet the credit policy. Status:Charged Off",
+]
+
+# `last_pymnt_d` dates the last payment received, i.e. when the borrower
+# stopped paying. Reaching 90+ days delinquent follows roughly this many
+# months later, so the delinquency event is dated last_pymnt_d + lag.
+DPD_LAG_MONTHS = 3
+
+# ── Post-origination columns ─────────────────────────────────────────────
+# None of these are known when the lending decision is made. `last_fico_*` is
+# the borrower's score at the most recent credit pull, which for a defaulted
+# loan is measured *after* the default. They exist here only so that
+# scripts/leakage_demo.py can show what including them does.
+LEAKY = [
+    "last_fico_range_low",
+    "last_fico_range_high",
+    "last_pymnt_amnt",
+    "out_prncp",
+    "total_pymnt",
+    "total_rec_int",
+]
+
 # ── Feature groups ───────────────────────────────────────────────────────
 # INCUMBENT features are LendingClub's *own* risk model output, not borrower
 # attributes. A model trained on them is largely re-learning the existing
@@ -59,12 +94,13 @@ META = [
     "term",
     "loan_status",
     "earliest_cr_line",
+    "last_pymnt_d",
     "total_rec_prncp",
     "recoveries",
 ]
 
 USECOLS = sorted(
-    set(INCUMBENT + APPLICANT_NUMERIC + APPLICANT_CATEGORICAL + META)
+    set(INCUMBENT + APPLICANT_NUMERIC + APPLICANT_CATEGORICAL + META + LEAKY)
 )
 
 # ── Economics ────────────────────────────────────────────────────────────

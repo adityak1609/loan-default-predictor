@@ -117,13 +117,80 @@ That 0.0250 maturity penalty accounts for essentially the entire 0.0238
 out-of-time drop. **There is no evidence of genuine temporal degradation in this
 data; the apparent decay is survivorship.**
 
-*Limitation:* this snapshot cannot fully resolve the question. The correct fix is
-a fixed observation window — relabel the target as "defaulted within 12 months of
-origination", which makes every vintage comparable and allows currently-`Current`
-loans to be included as negatives rather than dropped. That requires
-`last_pymnt_d` to date resolutions and is the intended next step.
-
 Reproduce: `python scripts/temporal_validation.py` → `reports/maturity_confound.csv`
+
+### 5. With the bias removed, half the drop survives
+
+Finding 4 argued from a proxy. The direct fix is a **fixed observation window**:
+relabel the target as *defaulted within 12 months of origination*, dating the
+event from `last_pymnt_d` plus a 3-month delinquency lag. Every vintage is then
+watched for exactly the same 12 months, loans still performing at the snapshot
+become valid negatives instead of being discarded, and eligibility depends only
+on issue date — never on outcome.
+
+This recovers **1,765,426 loans**, up from 1,345,350, and the vintage curve
+changes completely:
+
+| Issue year | Default rate, resolved-only | Default rate, 12-month window |
+|---|---|---|
+| 2013 | 15.6% | 3.2% |
+| 2014 | 18.5% | 3.4% |
+| 2015 | 20.2% | 4.0% |
+| 2016 | 23.3% | 4.7% |
+| 2017 | 23.1% | 4.4% |
+
+The resolved-only view suggests credit quality collapsing after 2015. It wasn't
+— that curve is measuring how much of each vintage had resolved, not how much
+had defaulted.
+
+Re-running the out-of-time test on this target (train ≤2014, validate 2015, test
+2016–17):
+
+| Target | In-time AUC | Out-of-time AUC | Drop |
+|---|---|---|---|
+| resolved-only | 0.7359 | 0.7121 | **0.0238** |
+| 12-month window | 0.7249 | 0.7119 | **0.0131** |
+
+**The honest result is that this partly contradicts finding 4.** Roughly half
+the apparent degradation was survivorship, but a residual 0.0131 survives the
+correction — so there is some mild genuine drift, not none. The per-vintage AUC
+trend (0.79 in 2014 → 0.72 in 2015 → 0.71 in 2016–17) points the same way.
+Finding 4's maturity decomposition was directionally right about the mechanism
+and overstated how much it explained.
+
+The delinquency lag is the softest assumption; it moves the base rate but not
+the conclusion:
+
+| Lag (months) | Default rate |
+|---|---|
+| 0 | 6.13% |
+| 3 (used) | 4.13% |
+| 5 | 2.88% |
+
+Reproduce: `python scripts/horizon_validation.py` → `reports/horizon_validation.json`
+
+### 6. Published 0.95+ AUCs on this dataset are leakage
+
+The dataset ships with columns recorded *after* the loan performed:
+`last_fico_range_low/high` (credit score at the most recent pull — for a
+defaulted loan, pulled after the default), `last_pymnt_amnt`, `out_prncp`,
+`total_pymnt`, `total_rec_int`. None exist at decision time.
+
+Adding them to the same model on the same split:
+
+| Feature set | Test AUC | Average precision | Deployable |
+|---|---|---|---|
+| `full` | 0.7243 | 0.3943 | yes |
+| `full_leaky` | **0.9995** | 0.9987 | **no** |
+
+`total_pymnt` is the top feature by a wide margin, which is unsurprising — a
+fully repaid loan pays back principal plus interest and a charged-off one does
+not, so the column is very nearly the label itself.
+
+This is in the repo as a runnable script rather than a caveat, because "our 0.72
+is honest and their 0.95 is leakage" is a claim worth being able to demonstrate.
+
+Reproduce: `python scripts/leakage_demo.py` → `reports/leakage_demo.csv`
 
 ---
 
@@ -131,7 +198,9 @@ Reproduce: `python scripts/temporal_validation.py` → `reports/maturity_confoun
 
 | | Before | After |
 |---|---|---|
-| Rows | 1,220,127 | 1,345,350 (`dropna` removed — LightGBM handles NaN, and `emp_length` missingness correlates with the target) |
+| Rows | 1,220,127 | 1,345,350 resolved-only, or 1,765,426 on the 12-month window target (`dropna` removed — LightGBM handles NaN, and `emp_length` missingness correlates with the target) |
+| Target | terminal status, unobservable for late vintages | also "default within 12 months of origination", comparable across vintages |
+| Leakage | untested | demonstrated explicitly (0.7243 → 0.9995) |
 | Baseline | none | grade-only, incumbent-only, applicant-only ablations |
 | Linear baseline | unscaled, non-converged | imputed + scaled pipeline |
 | Threshold | 0.5, implicit in `predict()` | expected-loss minimisation with per-loan costs |
@@ -151,8 +220,9 @@ was shown with the wrong sign.
 ## Layout
 
 ```
-src/loanguard/     config, data prep, features, evaluation
-scripts/           prepare_data · run_baselines · train_calibrate · temporal_validation
+src/loanguard/     config, data prep, features, model, evaluation
+scripts/           prepare_data · run_baselines · train_calibrate
+                   temporal_validation · horizon_validation · leakage_demo
 reports/           all generated results (tracked in git)
 notebooks/legacy/  original exploratory notebooks, superseded
 streamlit_app.py   serving UI
@@ -166,10 +236,12 @@ pip install -r requirements.txt
 # Download accepted_2007_to_2018Q4.csv (~1.6 GB) into the repo root:
 # https://www.kaggle.com/datasets/wordsforthewise/lending-club
 
-python scripts/prepare_data.py        # ~3 min, writes processed/loans.parquet
-python scripts/run_baselines.py
-python scripts/train_calibrate.py     # writes serving artefacts
-python scripts/temporal_validation.py
+python scripts/prepare_data.py        # ~4 min, writes both target tables
+python scripts/run_baselines.py       # finding 1
+python scripts/train_calibrate.py     # findings 2-3, writes serving artefacts
+python scripts/temporal_validation.py # finding 4
+python scripts/horizon_validation.py  # finding 5 (needs finding 4's output)
+python scripts/leakage_demo.py        # finding 6
 
 streamlit run streamlit_app.py
 ```
@@ -178,8 +250,17 @@ Seed is fixed at 42 throughout (`src/loanguard/config.py`).
 
 ## Known limitations
 
-- **Maturity bias is measured, not removed.** See finding 4. The 12-month
-  observation window is the fix.
+- **The residual 0.013 out-of-time drop is unexplained.** Finding 5 removes
+  survivorship but leaves real degradation on the table. Candidate causes:
+  LendingClub's borrower mix widening after 2015, or the newer bureau fields
+  (`bc_util`, `tot_cur_bal`, `acc_open_past_24mths`) being absent before 2012,
+  which makes early vintages structurally different. Not yet separated.
+- **The delinquency lag is an assumption, not a measurement.** 3 months is a
+  reasonable proxy for last-payment → 90+ DPD, but the dataset does not date
+  the delinquency directly.
+- **The 12-month horizon excludes 2018 originations** and truncates late
+  defaults. A 24-month window would capture more of the loss but cover fewer
+  vintages.
 - **LGD is a portfolio average.** It almost certainly varies by grade and term;
   a per-segment estimate would sharpen the cost model more than any modelling
   change (see the sensitivity table).
