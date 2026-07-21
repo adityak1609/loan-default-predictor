@@ -1,0 +1,87 @@
+{
+  "n_rows": 1345350,
+  "default_rate": 0.19964990522912254,
+  "imbalance_ratio": 4.008767716931187,
+  "empirical_lgd": 0.6221748501748844,
+  "missing_share": {
+    "dti": 0.0002779945739027019,
+    "emp_length": 0.05836102129557364,
+    "revol_util": 0.0006370089567770469,
+    "mort_acc": 0.035144014568699596,
+    "inq_last_6mths": 7.433009997398447e-07
+  },
+  "by_year": [
+    {
+      "issue_year": 2007,
+      "n": 251,
+      "default_rate": 0.1793,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2008,
+      "n": 1562,
+      "default_rate": 0.1581,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2009,
+      "n": 4716,
+      "default_rate": 0.126,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2010,
+      "n": 11536,
+      "default_rate": 0.1289,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2011,
+      "n": 21721,
+      "default_rate": 0.1518,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2012,
+      "n": 53367,
+      "default_rate": 0.162,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2013,
+      "n": 134804,
+      "default_rate": 0.156,
+      "matured_share": 1.0
+    },
+    {
+      "issue_year": 2014,
+      "n": 223103,
+      "default_rate": 0.1845,
+      "matured_share": 0.7287
+    },
+    {
+      "issue_year": 2015,
+      "n": 375546,
+      "default_rate": 0.2019,
+      "matured_share": 0.7536
+    },
+    {
+      "issue_year": 2016,
+      "n": 293105,
+      "default_rate": 0.2329,
+      "matured_share": 0.0
+    },
+    {
+      "issue_year": 2017,
+      "n": 169321,
+      "default_rate": 0.2313,
+      "matured_share": 0.0
+    },
+    {
+      "issue_year": 2018,
+      "n": 56318,
+      "default_rate": 0.1576,
+      "matured_share": 0.0
+    }
+  ]
+}

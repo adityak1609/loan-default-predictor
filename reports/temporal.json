@@ -1,0 +1,26 @@
+{
+  "in_time_2015": {
+    "n": 375546,
+    "auc": 0.7358868791708035,
+    "average_precision": 0.41403555226294236,
+    "base_rate": 0.20185010624530683,
+    "brier": 0.142796878181258,
+    "ece": 0.02779478213732844,
+    "mean_predicted": 0.17406763790826174,
+    "observed_rate": 0.20185010624530683
+  },
+  "out_of_time_2016_2018": {
+    "n": 518744,
+    "auc": 0.7120639399913523,
+    "average_precision": 0.4032174558938398,
+    "base_rate": 0.2241857255216446,
+    "brier": 0.160370621005992,
+    "ece": 0.05527910377749738,
+    "mean_predicted": 0.16898754865259455,
+    "observed_rate": 0.2241857255216446
+  },
+  "auc_drop": 0.02382293917945122,
+  "maturity_base_rate_gap": 0.19458358409434884,
+  "maturity_auc_gap": -0.024950407311083778,
+  "note": "No 2016+ loan reached term before the 2018Q4 snapshot, so the out-of-time test set contains only early-resolving loans. The maturity gaps quantify how much of the AUC change that alone could explain."
+}

@@ -1,0 +1,37 @@
+[
+  {
+    "model": "grade_only",
+    "n_features": 1,
+    "auc": 0.6794073979572515,
+    "average_precision": 0.31114197977895647,
+    "base_rate": 0.19965015386292573
+  },
+  {
+    "model": "incumbent_only",
+    "n_features": 3,
+    "auc": 0.6967910174099714,
+    "average_precision": 0.3505019114966072,
+    "base_rate": 0.19965015386292573
+  },
+  {
+    "model": "applicant_only",
+    "n_features": 43,
+    "auc": 0.7182425280664216,
+    "average_precision": 0.3876838621132799,
+    "base_rate": 0.19965015386292573
+  },
+  {
+    "model": "full",
+    "n_features": 46,
+    "auc": 0.7243375225798409,
+    "average_precision": 0.3943316135005595,
+    "base_rate": 0.19965015386292573
+  },
+  {
+    "model": "full_logreg",
+    "n_features": 46,
+    "auc": 0.7101202204039536,
+    "average_precision": 0.3700029394038217,
+    "base_rate": 0.19965015386292573
+  }
+]

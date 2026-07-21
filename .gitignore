@@ -1,0 +1,16 @@
+# Raw data — 1.6 GB, download separately (see README)
+accepted_2007_to_2018Q4.csv
+*.csv.gz
+*.zip
+
+# Derived artefacts — regenerate with scripts/prepare_data.py
+processed/
+mlruns/
+mlflow.db
+
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+
+# reports/ is deliberately tracked: those files are the result of the analysis.
