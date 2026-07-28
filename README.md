@@ -226,7 +226,13 @@ scripts/           prepare_data · run_baselines · train_calibrate
 reports/           all generated results (tracked in git)
 notebooks/legacy/  original exploratory notebooks, superseded
 streamlit_app.py   serving UI
+TECHNICAL.md       how the code produces these findings, and where it is soft
+TECH_STACK.md      what each library does and what the model looks at
 ```
+
+`TECHNICAL.md` is the deep dive: the two target definitions, the cost model
+derivation, the train/serve contract, and a ranked list of known soft spots.
+`TECH_STACK.md` is the plain-English version — no prior background assumed.
 
 ## Running it
 
