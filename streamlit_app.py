@@ -18,7 +18,7 @@ from loanguard.config import GRADE_MAP, PROCESSED  # noqa: E402
 # ── Page Config ──────────────────────────────────────────────
 st.set_page_config(
     page_title="LoanGuard AI",
-    page_icon="🏦",
+    page_icon="🛡️",
     layout="wide",
     initial_sidebar_state="collapsed"
 )
@@ -26,239 +26,303 @@ st.set_page_config(
 # ── Custom CSS ───────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
-* { font-family: 'DM Sans', sans-serif; }
+* { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; }
 
 .stApp {
-    background: #0a0a0f;
-    color: #e8e8f0;
+    background: #0f1117;
+    color: #e2e8f0;
 }
 
 h1, h2, h3 {
-    font-family: 'Syne', sans-serif !important;
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 700 !important;
 }
 
-/* Hero Header */
+/* ── Hide Streamlit defaults ── */
+#MainMenu, footer, header { visibility: hidden; }
+.block-container { padding-top: 2rem; }
+
+/* ── Hero Header ── */
 .hero {
-    background: linear-gradient(135deg, #0d0d1a 0%, #0a0a0f 50%, #0d1117 100%);
-    border: 1px solid #1e1e2e;
-    border-radius: 20px;
-    padding: 48px;
-    margin-bottom: 32px;
+    background: linear-gradient(135deg, #0c1821 0%, #0f1b2d 40%, #112240 100%);
+    border: 1px solid rgba(45, 212, 191, 0.15);
+    border-radius: 16px;
+    padding: 40px 44px;
+    margin-bottom: 36px;
     position: relative;
     overflow: hidden;
 }
 .hero::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
+    top: -60%;
+    right: -20%;
+    width: 60%;
     height: 200%;
-    background: radial-gradient(circle at 30% 50%, rgba(99, 102, 241, 0.08) 0%, transparent 60%),
-                radial-gradient(circle at 70% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+    background: radial-gradient(circle, rgba(45, 212, 191, 0.06) 0%, transparent 70%);
     pointer-events: none;
 }
-.hero-title {
-    font-family: 'Syne', sans-serif;
-    font-size: 3rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 50%, #6ee7b7 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0 0 12px 0;
-    line-height: 1.1;
-}
-.hero-sub {
-    color: #6b7280;
-    font-size: 1.05rem;
-    font-weight: 300;
-    margin: 0;
+.hero::after {
+    content: '';
+    position: absolute;
+    bottom: -40%;
+    left: -10%;
+    width: 50%;
+    height: 150%;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.04) 0%, transparent 70%);
+    pointer-events: none;
 }
 .hero-badge {
     display: inline-block;
-    background: rgba(99, 102, 241, 0.15);
-    border: 1px solid rgba(99, 102, 241, 0.3);
-    color: #a5b4fc;
-    padding: 4px 14px;
+    background: rgba(45, 212, 191, 0.1);
+    border: 1px solid rgba(45, 212, 191, 0.25);
+    color: #2dd4bf;
+    padding: 5px 16px;
     border-radius: 100px;
-    font-size: 0.75rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 16px;
-}
-
-/* Section Headers */
-.section-header {
-    font-family: 'Syne', sans-serif;
     font-size: 0.7rem;
     font-weight: 600;
-    letter-spacing: 0.15em;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #4b5563;
-    margin: 0 0 16px 0;
-    padding-bottom: 8px;
-    border-bottom: 1px solid #1e1e2e;
+    margin-bottom: 18px;
+}
+.hero-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    margin: 0 0 10px 0;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+}
+.hero-title span {
+    background: linear-gradient(135deg, #2dd4bf 0%, #38bdf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.hero-sub {
+    color: #64748b;
+    font-size: 0.92rem;
+    font-weight: 400;
+    margin: 0;
+    line-height: 1.6;
 }
 
-/* Input Cards */
+/* ── Section Headers ── */
+.section-header {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #475569;
+    margin: 0 0 18px 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #1e293b;
+}
+
+/* ── Input Cards ── */
 .input-card {
-    background: #0d0d1a;
-    border: 1px solid #1e1e2e;
-    border-radius: 16px;
-    padding: 24px;
-    margin-bottom: 16px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 12px;
 }
 
-/* Result Cards */
+/* ── Result Cards ── */
 .result-card {
-    background: #0d0d1a;
-    border: 1px solid #1e1e2e;
-    border-radius: 20px;
-    padding: 32px;
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px 32px;
     margin-bottom: 20px;
 }
 .result-card.high {
-    border-color: rgba(239, 68, 68, 0.4);
-    background: linear-gradient(135deg, #0d0d1a, #1a0d0d);
+    border-color: rgba(251, 146, 60, 0.4);
+    background: linear-gradient(145deg, #111827 0%, #1c1310 100%);
 }
 .result-card.medium {
-    border-color: rgba(245, 158, 11, 0.4);
-    background: linear-gradient(135deg, #0d0d1a, #1a150d);
+    border-color: rgba(250, 204, 21, 0.3);
+    background: linear-gradient(145deg, #111827 0%, #1a1812 100%);
 }
 .result-card.low {
-    border-color: rgba(16, 185, 129, 0.4);
-    background: linear-gradient(135deg, #0d0d1a, #0d1a12);
+    border-color: rgba(45, 212, 191, 0.3);
+    background: linear-gradient(145deg, #111827 0%, #0f1d1a 100%);
 }
 
 .prob-display {
-    font-family: 'Syne', sans-serif;
-    font-size: 5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 4.2rem;
     font-weight: 800;
     line-height: 1;
     margin: 0;
+    letter-spacing: -0.03em;
 }
-.prob-display.high { color: #ef4444; }
-.prob-display.medium { color: #f59e0b; }
-.prob-display.low { color: #10b981; }
+.prob-display.high { color: #fb923c; }
+.prob-display.medium { color: #facc15; }
+.prob-display.low { color: #2dd4bf; }
 
 .risk-label {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 700;
     margin-top: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
 }
-.risk-label.high { color: #ef4444; }
-.risk-label.medium { color: #f59e0b; }
-.risk-label.low { color: #10b981; }
+.risk-label.high { color: #fb923c; }
+.risk-label.medium { color: #facc15; }
+.risk-label.low { color: #2dd4bf; }
 
 .risk-desc {
-    color: #6b7280;
-    font-size: 0.85rem;
-    margin-top: 8px;
-    line-height: 1.5;
+    color: #64748b;
+    font-size: 0.82rem;
+    margin-top: 10px;
+    line-height: 1.55;
 }
 
-/* Progress Bar */
+/* ── Progress Bar ── */
 .prob-bar-container {
-    background: #1e1e2e;
+    background: #1e293b;
     border-radius: 100px;
-    height: 6px;
+    height: 5px;
     margin: 20px 0;
     overflow: hidden;
 }
 .prob-bar {
     height: 100%;
     border-radius: 100px;
-    transition: width 0.8s ease;
+    transition: width 0.8s cubic-bezier(0.22, 1, 0.36, 1);
 }
-.prob-bar.high { background: linear-gradient(90deg, #ef4444, #dc2626); }
-.prob-bar.medium { background: linear-gradient(90deg, #f59e0b, #d97706); }
-.prob-bar.low { background: linear-gradient(90deg, #10b981, #059669); }
+.prob-bar.high { background: linear-gradient(90deg, #fb923c, #f97316); }
+.prob-bar.medium { background: linear-gradient(90deg, #facc15, #eab308); }
+.prob-bar.low { background: linear-gradient(90deg, #2dd4bf, #14b8a6); }
 
-/* Stat Pills */
+/* ── Stat Pills ── */
 .stat-row {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     flex-wrap: wrap;
     margin-top: 20px;
 }
 .stat-pill {
-    background: #161622;
-    border: 1px solid #1e1e2e;
+    background: #0f1117;
+    border: 1px solid #1e293b;
     border-radius: 10px;
-    padding: 10px 16px;
+    padding: 10px 14px;
     flex: 1;
-    min-width: 100px;
+    min-width: 90px;
 }
 .stat-pill-label {
-    font-size: 0.65rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
     letter-spacing: 0.1em;
-    color: #4b5563;
+    color: #475569;
     margin-bottom: 4px;
+    font-weight: 500;
 }
 .stat-pill-value {
-    font-family: 'Syne', sans-serif;
-    font-size: 1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: #e8e8f0;
+    color: #e2e8f0;
 }
 
-/* Predict Button */
+/* ── Predict Button ── */
 .stButton > button {
-    background: linear-gradient(135deg, #6366f1, #4f46e5) !important;
+    background: linear-gradient(135deg, #0d9488, #14b8a6) !important;
     color: white !important;
     border: none !important;
-    border-radius: 12px !important;
-    padding: 14px 32px !important;
-    font-family: 'Syne', sans-serif !important;
+    border-radius: 10px !important;
+    padding: 12px 28px !important;
+    font-family: 'Inter', sans-serif !important;
     font-weight: 600 !important;
-    font-size: 0.95rem !important;
-    letter-spacing: 0.02em !important;
+    font-size: 0.88rem !important;
+    letter-spacing: 0.01em !important;
     width: 100% !important;
-    transition: all 0.2s ease !important;
-    box-shadow: 0 4px 24px rgba(99, 102, 241, 0.3) !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 4px 20px rgba(45, 212, 191, 0.2) !important;
 }
 .stButton > button:hover {
-    transform: translateY(-2px) !important;
-    box-shadow: 0 8px 32px rgba(99, 102, 241, 0.5) !important;
+    transform: translateY(-1px) !important;
+    box-shadow: 0 8px 28px rgba(45, 212, 191, 0.35) !important;
+    background: linear-gradient(135deg, #14b8a6, #2dd4bf) !important;
 }
 
-/* Streamlit element overrides */
+/* ── Streamlit element overrides ── */
 .stSelectbox > div > div {
-    background: #0d0d1a !important;
-    border-color: #1e1e2e !important;
-    color: #e8e8f0 !important;
+    background: #111827 !important;
+    border-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-radius: 8px !important;
 }
 .stSlider > div > div > div {
-    background: #6366f1 !important;
+    background: #14b8a6 !important;
 }
-label { color: #9ca3af !important; font-size: 0.85rem !important; }
+label {
+    color: #94a3b8 !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+}
 .stNumberInput > div > div > input {
-    background: #0d0d1a !important;
-    border-color: #1e1e2e !important;
-    color: #e8e8f0 !important;
+    background: #111827 !important;
+    border-color: #1e293b !important;
+    color: #e2e8f0 !important;
+    border-radius: 8px !important;
 }
 
-/* SHAP section */
+/* ── SHAP section ── */
+.shap-card {
+    background: #111827;
+    border: 1px solid #1e293b;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-top: 16px;
+}
 .shap-header {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.1rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
     font-weight: 700;
-    color: #e8e8f0;
+    color: #e2e8f0;
     margin-bottom: 4px;
 }
 .shap-sub {
-    color: #4b5563;
-    font-size: 0.8rem;
+    color: #475569;
+    font-size: 0.78rem;
     margin-bottom: 20px;
+    line-height: 1.5;
 }
 
-/* Divider */
-hr { border-color: #1e1e2e !important; }
+/* ── Await card ── */
+.await-card {
+    background: #111827;
+    border: 1px dashed #1e293b;
+    border-radius: 16px;
+    padding: 56px 32px;
+    text-align: center;
+}
+.await-icon {
+    font-size: 2.5rem;
+    margin-bottom: 14px;
+    opacity: 0.5;
+}
+.await-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+    margin: 0 0 6px 0;
+}
+.await-sub {
+    color: #334155;
+    font-size: 0.78rem;
+    margin: 0;
+}
+
+/* ── Divider ── */
+hr { border-color: #1e293b !important; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -281,9 +345,9 @@ THRESHOLD = cfg['threshold']
 st.markdown("""
 <div class="hero">
     <div class="hero-badge">AI-Powered Risk Assessment</div>
-    <p class="hero-title">LoanGuard AI</p>
+    <p class="hero-title">Loan<span>Guard</span></p>
     <p class="hero-sub">Calibrated default probability with per-application explanations.<br>
-    Trained on 1.35M resolved LendingClub loans (2007–2018) · test AUC 0.724 · Brier 0.143.</p>
+    Trained on 1.35M resolved LendingClub loans (2007–2018) · test AUC 0.724 · ECE 0.002.</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -338,21 +402,10 @@ with right:
 
     if not predict_btn:
         st.markdown("""
-        <div style="
-            background: #0d0d1a;
-            border: 1px dashed #1e1e2e;
-            border-radius: 20px;
-            padding: 60px 32px;
-            text-align: center;
-        ">
-            <div style="font-size: 3rem; margin-bottom: 16px;">🏦</div>
-            <p style="font-family: 'Syne', sans-serif; font-size: 1.1rem;
-               font-weight: 600; color: #374151; margin: 0 0 8px 0;">
-               Awaiting Analysis
-            </p>
-            <p style="color: #374151; font-size: 0.8rem; margin: 0;">
-               Fill in borrower details and click analyze
-            </p>
+        <div class="await-card">
+            <div class="await-icon">🛡️</div>
+            <p class="await-title">Awaiting Analysis</p>
+            <p class="await-sub">Fill in borrower details and click analyze</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -399,17 +452,20 @@ with right:
                     "minimising expected loss on held-out data.")
         elif prob >= THRESHOLD * 0.6:
             tier = "medium"
-            desc = "Below the decline threshold but in the upper risk band. Manual review."
+            desc = "Below the decline threshold but in the upper risk band. Manual review recommended."
         else:
             tier = "low"
             desc = "Well inside the approve band for this portfolio's loss economics."
+
+        tier_icons = {"high": "⚠️", "medium": "◉", "low": "✓"}
+        tier_labels = {"high": "HIGH RISK", "medium": "ELEVATED", "low": "LOW RISK"}
 
         # Result Card
         st.markdown(f"""
         <div class="result-card {tier}">
             <p class="prob-display {tier}">{pct:.1f}%</p>
             <p class="risk-label {tier}">
-                {"🔴 HIGH RISK" if tier=="high" else "🟡 MEDIUM RISK" if tier=="medium" else "🟢 LOW RISK"}
+                {tier_icons[tier]} {tier_labels[tier]}
             </p>
             <p class="risk-desc">{desc}</p>
             <div class="prob-bar-container">
@@ -438,10 +494,12 @@ with right:
 
         # SHAP
         st.markdown("""
-        <div class="shap-header">Why this prediction?</div>
-        <div class="shap-sub">SHAP contributions to the raw model score (log-odds),
-        before calibration &mdash; directionally consistent with the probability above,
-        but not on the same scale</div>
+        <div class="shap-card">
+            <div class="shap-header">Why this prediction?</div>
+            <div class="shap-sub">SHAP contributions to the raw model score (log-odds),
+            before calibration — directionally consistent with the probability above,
+            but not on the same scale.</div>
+        </div>
         """, unsafe_allow_html=True)
 
         with st.spinner("Computing explanations..."):
@@ -458,20 +516,63 @@ with right:
                 sv, base = shap_values[0], explainer.expected_value
             base = float(np.ravel(base)[0])
 
-            fig, ax = plt.subplots(figsize=(8, 5))
-            fig.patch.set_facecolor('#0d0d1a')
-            ax.set_facecolor('#0d0d1a')
+            # ── Custom horizontal bar chart (replaces SHAP waterfall) ──
+            feature_names = input_df.columns.tolist()
+            contributions = sv
 
-            shap.plots._waterfall.waterfall_legacy(
-                base, sv, input_df.iloc[0], show=False
-            )
+            # Sort by absolute value, take top 12
+            indices = np.argsort(np.abs(contributions))[::-1][:12]
+            top_names = [feature_names[i] for i in indices]
+            top_vals  = [contributions[i] for i in indices]
 
-            plt.gcf().set_facecolor('#0d0d1a')
-            for text in plt.gcf().findobj(matplotlib.text.Text):
-                text.set_color('#9ca3af')
-            for spine in ax.spines.values():
-                spine.set_edgecolor('#1e1e2e')
-            ax.tick_params(colors='#6b7280')
+            # Reverse for bottom-to-top display
+            top_names = top_names[::-1]
+            top_vals  = top_vals[::-1]
+
+            fig, ax = plt.subplots(figsize=(7, 4.5))
+            fig.patch.set_facecolor('#111827')
+            ax.set_facecolor('#111827')
+
+            colors = ['#2dd4bf' if v > 0 else '#fb923c' for v in top_vals]
+            bars = ax.barh(range(len(top_names)), top_vals, color=colors,
+                           height=0.6, edgecolor='none', alpha=0.9)
+
+            ax.set_yticks(range(len(top_names)))
+            ax.set_yticklabels(top_names, fontsize=9, color='#94a3b8',
+                               fontfamily='Inter')
+            ax.set_xlabel('SHAP value (impact on log-odds)', fontsize=9,
+                          color='#64748b', fontfamily='Inter', labelpad=10)
+            ax.tick_params(axis='x', colors='#475569', labelsize=8)
+
+            # Add value labels
+            for bar, val in zip(bars, top_vals):
+                x_pos = bar.get_width()
+                ha = 'left' if val >= 0 else 'right'
+                offset = 0.01 if val >= 0 else -0.01
+                ax.text(x_pos + offset, bar.get_y() + bar.get_height() / 2,
+                        f'{val:+.3f}', va='center', ha=ha,
+                        fontsize=7.5, color='#94a3b8', fontfamily='Inter')
+
+            ax.axvline(x=0, color='#334155', linewidth=0.8, linestyle='-')
+            ax.spines['top'].set_visible(False)
+            ax.spines['right'].set_visible(False)
+            ax.spines['bottom'].set_color('#1e293b')
+            ax.spines['left'].set_color('#1e293b')
+
+            # Title
+            ax.set_title(f'f(x) = {base + sum(contributions):.3f}   (base = {base:.3f})',
+                         fontsize=9, color='#64748b', fontfamily='Inter',
+                         pad=12, loc='left')
+
+            # Legend
+            from matplotlib.patches import Patch
+            legend_elements = [
+                Patch(facecolor='#2dd4bf', label='Increases risk'),
+                Patch(facecolor='#fb923c', label='Decreases risk')
+            ]
+            leg = ax.legend(handles=legend_elements, loc='lower right',
+                           fontsize=7.5, frameon=True, facecolor='#111827',
+                           edgecolor='#1e293b', labelcolor='#94a3b8')
 
             plt.tight_layout()
             st.pyplot(fig)
