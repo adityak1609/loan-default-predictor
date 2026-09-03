@@ -4,7 +4,15 @@ accepted_2007_to_2018Q4.csv
 *.zip
 
 # Derived artefacts — regenerate with scripts/prepare_data.py
-processed/
+# Large data files (regenerate with prepare_data.py)
+processed/*.parquet
+
+# Serving artefacts are tracked (small, needed by the Streamlit app)
+# processed/lgbm_model.pkl
+# processed/calibrator.pkl
+# processed/feature_spec.json
+# processed/serving_config.json
+
 mlruns/
 mlflow.db
 
