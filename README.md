@@ -1,5 +1,7 @@
 # LoanGuard
 
+**[Live Demo →](https://loan-d-qwshwdrewxtufmpqexbqd3.streamlit.app/)**
+
 Credit default risk modelling on the LendingClub 2007–2018 extract (1.35M resolved loans).
 
 The interesting results here are not the AUC. They are what happens when you ask
@@ -225,9 +227,10 @@ scripts/           prepare_data · run_baselines · train_calibrate
                    temporal_validation · horizon_validation · leakage_demo
 reports/           all generated results (tracked in git)
 notebooks/legacy/  original exploratory notebooks, superseded
-streamlit_app.py   serving UI
+streamlit_app.py   serving UI (deployed on Streamlit Community Cloud)
 TECHNICAL.md       how the code produces these findings, and where it is soft
 TECH_STACK.md      what each library does and what the model looks at
+processed/         model artefacts tracked for deployment (parquet files gitignored)
 ```
 
 `TECHNICAL.md` is the deep dive: the two target definitions, the cost model
@@ -253,6 +256,19 @@ streamlit run streamlit_app.py
 ```
 
 Seed is fixed at 42 throughout (`src/loanguard/config.py`).
+
+## Deployment
+
+The app is deployed on **Streamlit Community Cloud** at:
+
+> https://loan-d-qwshwdrewxtufmpqexbqd3.streamlit.app/
+
+The four serving artefacts (`lgbm_model.pkl`, `calibrator.pkl`, `feature_spec.json`,
+`serving_config.json`) are tracked in `processed/` so that Streamlit Cloud can load
+them directly from the repo. The large parquet data files remain gitignored.
+
+To redeploy after changes, push to `main` — Streamlit Cloud auto-redeploys on every
+commit.
 
 ## Known limitations
 
